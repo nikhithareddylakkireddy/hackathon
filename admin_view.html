@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Complaint Details</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    min-height:100vh;
+    background:url("{{ url_for('static',filename='images/campus.jpeg') }}") center/cover no-repeat;
+}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+}
+
+/* ===== Header ===== */
+.header{
+    background:rgba(0,0,0,0.75);
+    color:white;
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+    z-index:1;
+}
+.header img{ width:55px; }
+.header span{ font-weight:bold; }
+.back{
+    margin-left:auto;
+    color:white;
+    text-decoration:none;
+}
+
+/* ===== Container ===== */
+.container{
+    max-width:800px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    position:relative;
+    z-index:1;
+}
+
+h2{ margin-top:0; }
+
+.badge{
+    padding:5px 12px;
+    border-radius:20px;
+    color:white;
+    font-size:13px;
+}
+.submitted{ background:#ff9800; }
+.delayed{ background:#f44336; }
+.resolved{ background:#28a745; }
+
+.actions a{
+    display:inline-block;
+    margin-right:12px;
+    margin-top:15px;
+    padding:8px 14px;
+    background:#007bff;
+    color:white;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:14px;
+}
+.actions a.delay{
+    background:#ff9800;
+}
+.actions a:hover{
+    opacity:.9;
+}
+
+.section{
+    margin-bottom:15px;
+}
+.section b{
+    display:inline-block;
+    width:160px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<div class="header">
+    <img src="{{ url_for('static',filename='images/logo.jpeg') }}">
+    <span>Annamacharya Institute of Technology and Sciences Tirupati</span>
+    <a class="back" href="/admin/{{ email }}">⬅ Back</a>
+</div>
+
+<!-- ===== Content ===== -->
+<div class="container">
+
+<h2>📄 Complaint Details</h2>
+
+<div class="section"><b>Student Name:</b> {{ g[2] }}</div>
+<div class="section"><b>Student Email:</b> {{ g[1] }}</div>
+<div class="section"><b>Department:</b> {{ g[3] }}</div>
+<div class="section"><b>Section:</b> {{ g[4] }}</div>
+<div class="section"><b>Category:</b> {{ g[5] }}</div>
+<div class="section"><b>Authority:</b> {{ g[7] }}</div>
+<div class="section">
+    <b>Status:</b>
+    <span class="badge
+        {% if g[8]=='Submitted' %}submitted
+        {% elif g[8]=='Delayed' %}delayed
+        {% elif g[8]=='Resolved' %}resolved
+        {% endif %}">
+        {{ g[8] }}
+    </span>
+</div>
+
+<hr>
+
+<div class="section">
+<b>Complaint Description:</b><br><br>
+{{ g[6] }}
+</div>
+
+{% if g[8]=='Delayed' %}
+<hr>
+<div class="section" style="color:#d32f2f;">
+<b>Delay Reason:</b> {{ g[9] }} <br>
+<b>Expected Days:</b> {{ g[10] }}
+</div>
+{% endif %}
+
+{% if g[8] != 'Resolved' %}
+<div class="actions">
+    <a href="/update/{{ g[0] }}/{{ email }}">✔ Resolve</a>
+    <a class="delay" href="/delay/{{ g[0] }}/{{ email }}">⏳ Delay</a>
+</div>
+{% endif %}
+
+{% if g[11] %}
+<hr>
+<h3>⭐ Student Feedback</h3>
+<p><b>Rating:</b> {{ g[11] }}/5</p>
+<p><b>Feedback:</b> {{ g[12] }}</p>
+{% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    min-height:100vh;
+    background:url("{{ url_for('static',filename='images/campus.jpeg') }}") center/cover no-repeat;
+}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+}
+
+/* ===== Header ===== */
+.header{
+    background:rgba(0,0,0,0.75);
+    color:white;
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+    z-index:1;
+}
+.header img{ width:55px; }
+.header span{ font-weight:bold; }
+
+/* ===== Bell ===== */
+.bell{
+    margin-left:auto;
+    position:relative;
+    font-size:22px;
+    text-decoration:none;
+    color:white;
+}
+.badge{
+    position:absolute;
+    top:-6px;
+    right:-10px;
+    background:red;
+    color:white;
+    border-radius:50%;
+    padding:3px 7px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* ===== Main Container ===== */
+.container{
+    max-width:900px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    position:relative;
+    z-index:1;
+}
+
+input,select,textarea,button{
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    font-size:14px;
+}
+button{
+    background:#007bff;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* ===== Complaint Card ===== */
+.card{
+    background:#f8f9fa;
+    padding:18px;
+    margin-top:20px;
+    border-radius:12px;
+}
+
+/* ===== Tracker ===== */
+.progress{
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+    margin-top:15px;
+}
+.progress:before{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:0;
+    right:0;
+    height:4px;
+    background:#ddd;
+}
+.step{
+    text-align:center;
+    width:25%;
+    position:relative;
+}
+.circle{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:#ccc;
+    margin:auto;
+    color:white;
+    line-height:30px;
+}
+.done .circle{ background:#28a745; }
+.active .circle{
+    background:#007bff;
+    animation:pulse 1.4s infinite;
+}
+@keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(0,123,255,.6)}
+    70%{box-shadow:0 0 0 12px rgba(0,123,255,0)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<div class="header">
+    <img src="{{ url_for('static',filename='images/logo.jpeg') }}">
+    <span>Annamacharya Institute of Technology and Sciences Tirupati</span>
+
+    <a class="bell" href="/notifications/{{ email }}">
+        🔔
+        {% if notif_count > 0 %}
+        <span class="badge">{{ notif_count }}</span>
+        {% endif %}
+    </a>
+</div>
+
+<!-- ===== Content ===== -->
+<div class="container">
+
+<h2>📝 Raise Complaint</h2>
+
+<form method="post">
+<input name="name" placeholder="Name" required>
+<input name="department" placeholder="Department" required>
+<input name="section" placeholder="Section" required>
+
+<select name="category" required>
+<option value="">Select Category</option>
+<option>Hostel</option>
+<option>Academics</option>
+<option>Fees</option>
+<option>Infrastructure</option>
+</select>
+
+<textarea name="complaint" placeholder="Describe issue" required></textarea>
+<button>Submit</button>
+</form>
+
+<h2 style="margin-top:30px;">📋 Your Complaints</h2>
+
+{% for c in complaints %}
+<div class="card">
+<b>Name:</b> {{ c[2] }} <br>
+<b>Dept:</b> {{ c[3] }} <br>
+<b>Section:</b> {{ c[4] }} <br>
+<b>Category:</b> {{ c[5] }} <br>
+<b>Issue:</b> {{ c[6] }} <br>
+<b>Authority:</b> {{ c[7] }}
+
+<div class="progress">
+<div class="step {{ 'done' if c[8]!='Submitted' else 'active' }}">
+<div class="circle">1</div>Submitted</div>
+
+<div class="step {{ 'done' if c[8] in ['Delayed','Resolved'] else 'active' if c[8]=='Processing' else '' }}">
+<div class="circle">2</div>Processing</div>
+
+<div class="step {{ 'active' if c[8]=='Delayed' else 'done' if c[8]=='Resolved' else '' }}">
+<div class="circle">3</div>Delayed</div>
+
+<div class="step {{ 'active' if c[8]=='Resolved' else '' }}">
+<div class="circle">4</div>Resolved</div>
+</div>
+
+{% if c[8]=='Delayed' %}
+<p style="color:#ff9800;margin-top:10px;">
+<b>Delay Reason:</b> {{ c[9] }} <br>
+<b>Expected Days:</b> {{ c[10] }}
+</p>
+{% endif %}
+
+{% if c[8]=='Resolved' and not c[12] %}
+<form method="post" action="/feedback/{{ c[0] }}/{{ email }}">
+<select name="rating" required>
+<option value="">Rating</option>
+<option value="5">⭐⭐⭐⭐⭐</option>
+<option value="4">⭐⭐⭐⭐</option>
+<option value="3">⭐⭐⭐</option>
+<option value="2">⭐⭐</option>
+<option value="1">⭐</option>
+</select>
+<textarea name="comment" placeholder="Feedback" required></textarea>
+<button>Submit Feedback</button>
+</form>
+{% endif %}
+
+{% if c[12] %}
+<p><b>⭐ Rating:</b> {{ c[12] }}/5<br><b>Feedback:</b> {{ c[13] }}</p>
+{% endif %}
+</div>
+{% else %}
+<p>No complaints yet.</p>
+{% endfor %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:url("{{ url_for('static',filename='images/campus.jpeg') }}") center/cover no-repeat;
+}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+}
+
+/* Header */
+.header{
+    background:rgba(0,0,0,0.7);
+    color:white;
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    z-index:1;
+}
+.header img{width:55px;margin-right:10px}
+.bell{
+    margin-left:auto;
+    color:white;
+    text-decoration:none;
+    font-size:20px;
+}
+
+/* Container */
+.container{
+    max-width:1100px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    position:relative;
+    z-index:1;
+}
+
+/* Table */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+th,td{
+    padding:12px;
+    text-align:center;
+}
+th{
+    background:#007bff;
+    color:white;
+}
+tr:nth-child(even){background:#f8f9fa}
+
+a{
+    color:#007bff;
+    font-weight:bold;
+    text-decoration:none;
+}
+a:hover{text-decoration:underline}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <img src="{{ url_for('static',filename='images/logo.jpeg') }}">
+    <b>Annamacharya Institute of Technology and Sciences Tirupati</b>
+    <a class="bell" href="/notifications/{{ email }}">🔔 {{ notif_count }}</a>
+</div>
+
+<div class="container">
+<h2>📋 Admin Dashboard</h2>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Department</th>
+<th>Section</th>
+<th>Category</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th>
+</tr>
+
+{% for g in data %}
+<tr>
+<td>{{ g[1] }}</td>
+<td>{{ g[2] }}</td>
+<td>{{ g[3] }}</td>
+<td>{{ g[4] }}</td>
+<td>{{ g[5] }}</td>
+<td>{{ g[6] }}</td>
+<td>
+<a href="/admin/view/{{ g[0] }}/{{ email }}">View</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+</body>
+</html>

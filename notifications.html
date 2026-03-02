@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Notifications</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    min-height:100vh;
+    background:url("{{ url_for('static',filename='images/campus.jpeg') }}") center/cover no-repeat;
+}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+}
+
+/* ===== Header ===== */
+.header{
+    background:rgba(0,0,0,0.7);
+    color:white;
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    z-index:1;
+}
+.header img{
+    width:55px;
+    margin-right:10px;
+}
+.header span{
+    font-weight:bold;
+}
+.back{
+    margin-left:auto;
+    color:white;
+    text-decoration:none;
+    font-size:14px;
+}
+
+/* ===== Container ===== */
+.container{
+    max-width:650px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    position:relative;
+    z-index:1;
+}
+
+/* ===== Notification Card ===== */
+.note{
+    background:#eef2ff;
+    padding:14px;
+    margin-bottom:15px;
+    border-left:5px solid #007bff;
+    border-radius:8px;
+    font-size:14px;
+}
+.time{
+    font-size:12px;
+    color:#666;
+    margin-top:4px;
+}
+
+.empty{
+    text-align:center;
+    color:#555;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<div class="header">
+    <img src="{{ url_for('static',filename='images/logo.jpeg') }}">
+    <span>Annamacharya Institute of Technology and Sciences Tirupati</span>
+    <a class="back" href="javascript:history.back()">⬅ Back</a>
+</div>
+
+<!-- ===== Notifications ===== -->
+<div class="container">
+<h2>🔔 Notifications</h2>
+
+{% for n in notes %}
+<div class="note">
+    {{ n[0] }}
+    <div class="time">{{ n[1] }}</div>
+</div>
+{% else %}
+<div class="empty">No notifications yet</div>
+{% endfor %}
+
+</div>
+
+</body>
+</html>

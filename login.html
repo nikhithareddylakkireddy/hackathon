@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+
+<style>
+body{
+    font-family: Arial;
+    margin: 0;
+    min-height: 100vh;
+
+    background-image: url("{{ url_for('static', filename='images/campus.jpeg') }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Top header */
+.header{
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.header img{
+    width: 70px;
+}
+
+.header span{
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 1px 1px 4px #000;
+}
+
+/* Login box */
+form{
+    background: rgba(255,255,255,0.92);
+    padding: 30px;
+    border-radius: 12px;
+    width: 340px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+h1{
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    color:#007bff;
+    margin-bottom:6px;
+}
+
+h2{
+    text-align: center;
+    margin-top:5px;
+    margin-bottom: 10px;
+}
+
+p{
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+input, select, button{
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+button{
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover{
+    background: #0056b3;
+}
+</style>
+</head>
+
+<body>
+
+<!-- College Header -->
+<div class="header">
+    <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="AITs Logo">
+    <span>Annamacharya Institute of Technology and Sciences – Tirupati</span>
+</div>
+
+<!-- Login Form -->
+<form method="post">
+
+    <!-- ✅ PROJECT TITLE (ONLY ADDITION) -->
+    <h1>Smart Campus Grievance and Request Management System</h1>
+
+    <h2>🔐 Login</h2>
+
+    <p>Use your Gmail ID to continue</p>
+
+    <input type="email" name="email" placeholder="Enter Gmail ID" required>
+
+    <select name="role" required>
+        <option value="">Select Role</option>
+        <option value="student">Student</option>
+        <option value="admin">Admin</option>
+    </select>
+
+    <button type="submit">Login</button>
+
+    <p style="margin-top:15px;font-size:12px;">
+        🔑 Admin must log in using the registered admin Gmail
+    </p>
+</form>
+
+</body>
+</html>

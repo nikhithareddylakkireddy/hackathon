@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Delay Complaint</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    min-height:100vh;
+    background:url("{{ url_for('static',filename='images/campus.jpeg') }}") center/cover no-repeat;
+}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+}
+
+.container{
+    max-width:400px;
+    margin:80px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    position:relative;
+    z-index:1;
+}
+
+textarea,input,button{
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+}
+button{
+    background:#ff9800;
+    color:white;
+    border:none;
+    border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>⏳ Delay Complaint</h2>
+
+<form method="post">
+<textarea name="reason" placeholder="Reason for delay" required></textarea>
+<input name="days" placeholder="Expected days" required>
+<button>Submit</button>
+</form>
+</div>
+
+</body>
+</html>
